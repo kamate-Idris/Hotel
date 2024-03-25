@@ -1,22 +1,35 @@
-import React from "react";
+import React, {useCallback} from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { COLORS } from "../constants/constants";
 import { InputField } from "../components/InputField";
 import Button from "../components/Button";
-import {
-  useFonts,
-  Charm_400Regular,
-  Charm_700Bold,
-} from "@expo-google-fonts/charm";
+
 import Icon from "../components/Icon";
+import {useFonts} from "expo-font";
+import * as SplashScreen from 'expo-splash-screen';
+
+SplashScreen.preventAutoHideAsync();
+
 
 const Login = () => {
-  let [fontsLoaded] = useFonts({
-    Charm_400Regular,
-    Charm_700Bold,
-  });
+  const [fontsLoaded,fontError] = useFonts({
+    "Charm-Bold" : require("../../assets/fonts/Charm-Bold.ttf")
+  })
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded || fontError) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
+
+
+
   return (
-    <View style={styles.container}>
+    <View style={styles.container} onLayout={onLayoutRootView}>
       <View style={styles.top}>
         <Text style={styles.login}>Login</Text>
         <Text style={styles.author}>Powered by kamate Drissa</Text>
@@ -24,7 +37,7 @@ const Login = () => {
       <View style={styles.bottom}>
         <Text style={styles.loginBottom}>Log in</Text>
         <InputField iconName="user" placeholder="Username" />
-        <InputField iconName="lock" placeholder="Password" />
+        <InputField iconName="lock" placeholder="Password" type='password'/>
         <Button bgColor={COLORS.blue} color={COLORS.white} text="Log in" />
         <View style={styles.icons}>
           <Icon name="facebook-square" bgColor={COLORS.blue} />
@@ -62,7 +75,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1.5,
     fontSize: 18,
     color: COLORS.white,
-    fontFamily: "Charm_400Regular",
+    fontFamily: "Charm-Bold",
     fontWeight: "100",
   },
   bottom: {

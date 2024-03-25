@@ -7,14 +7,16 @@ import { FontAwesome } from "@expo/vector-icons";
 
 
 
-export const InputField = ({iconName, placeholder, value, onChangeText }) => {
+export const InputField = ({iconName, placeholder, type, value, onChangeText }) => {
   return (
     <View style={styles.inputField}>
       <FontAwesome name={iconName} size={24} color="black" />
-      <TextInput
+      <TextInput style={{height : 20, fontSize : 16}}
         placeholder={placeholder}
         value={value}
         onChangeText={onChangeText}
+        selectionColor='black'
+        secureTextEntry={type === "password" ? true : false}
       />
     </View>
   );
